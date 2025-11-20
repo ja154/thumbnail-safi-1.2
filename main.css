@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 body {
@@ -591,12 +592,12 @@ header {
     }
 
     .promptInput {
-      border: 1px solid var(--primary);
+      /* border: 1px solid var(--primary); */
       padding: 10px;
       border-radius: 4px;
       font-size: 12px;
       height: 36px;
-      width: 100%;
+      /* width: 100%; */
       overflow: hidden;
 
       &:focus {
@@ -649,6 +650,16 @@ header {
     right: 10px;
     transform: translateY(-50%);
     color: var(--text-tertiary);
+  }
+
+  &.prompt {
+    /* border: 1px solid var(--primary); */
+    /* padding: 2px; */
+    border-radius: 4px;
+  }
+  
+  &.prompt .promptInput {
+     border: 1px solid var(--primary);
   }
 
   &.prompt::after {

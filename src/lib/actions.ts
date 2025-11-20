@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -74,6 +75,8 @@ export const addRound = async (
 
   const systemInstruction = modes[outputMode].systemInstruction
   const layoutInstruction = layouts[activeLayout]?.promptSuffix || ''
+  
+  // Combine prompt and layout into a cohesive description
   const fullPrompt = `${prompt}. ${layoutInstruction}`
 
   const newRound: Round = {

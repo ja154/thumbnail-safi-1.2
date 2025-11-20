@@ -1,13 +1,13 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
 import type {AppState} from './types'
-import 'immer'
 import {create, type UseBoundStore, type StoreApi} from 'zustand'
 import {immer} from 'zustand/middleware/immer'
 import {frontpageOrder} from './modes'
-import models from './models'
+import models, {activeModelKeys} from './models'
 import {keys} from './utils'
 import {persist} from 'zustand/middleware'
 
@@ -36,7 +36,7 @@ const initialState: AppState = {
   activeLayout: 'subject-right',
   batchMode: true,
   batchSize: 3,
-  batchModel: keys(models)[0]!,
+  batchModel: activeModelKeys[0],
   versusModels: {
     imagen: true,
     flashImage: false

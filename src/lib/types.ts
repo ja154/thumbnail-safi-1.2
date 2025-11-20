@@ -1,9 +1,8 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
 */
-import modes, {layouts} from './modes'
-import models from './models'
 
 export type Id = `${string}-${string}-${string}-${string}-${string}`
 
@@ -30,13 +29,13 @@ export type Layout = {
   promptSuffix: string
 }
 
-export type LayoutKey = keyof typeof layouts
+export type LayoutKey = 'subject-right' | 'subject-left' | 'split' | 'center' | 'minimal'
 
 export type Modes = {
   [key: string]: Mode
 }
 
-export type ModeKey = keyof typeof modes
+export type ModeKey = 'default' | 'tech_anime' | 'cinematic' | 'vibrant' | 'minimalist'
 
 export type Model = {
   name: string
@@ -54,7 +53,7 @@ export type Models = {
   [key: string]: Model
 }
 
-export type ModelKey = keyof typeof models
+export type ModelKey = 'imagen' | 'flashImage'
 
 export type OutputState = 'loading' | 'success' | 'error'
 

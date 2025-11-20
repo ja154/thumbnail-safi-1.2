@@ -1,3 +1,4 @@
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
@@ -309,19 +310,32 @@ export function Header({
               : void 0
           }
         >
-          <input
-            className="promptInput"
-            placeholder="Describe your thumbnail..."
-            onFocus={!isTouch ? () => setShowPresets(false) : void 0}
-            ref={inputRef}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                addRound(e.currentTarget.value, inputImage)
-                e.currentTarget.blur()
-              }
-            }}
-          />
+          <div className="flex w-full items-center gap-2">
+            <input
+              className="promptInput flex-grow"
+              placeholder="Describe your thumbnail..."
+              onFocus={!isTouch ? () => setShowPresets(false) : void 0}
+              ref={inputRef}
+              onKeyDown={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  addRound(e.currentTarget.value, inputImage)
+                  e.currentTarget.blur()
+                }
+              }}
+            />
+            <button 
+              className="button primary"
+              onClick={() => {
+                if (inputRef.current?.value) {
+                  addRound(inputRef.current.value, inputImage)
+                  setShowPresets(false)
+                }
+              }}
+            >
+              <span className="icon">auto_awesome</span>
+            </button>
+          </div>
           <div className={c('selector header-toggle ', {active: showPresets})}>
             <ul className="presets wrapped">
               <li>

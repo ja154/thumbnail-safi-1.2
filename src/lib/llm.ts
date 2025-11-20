@@ -43,6 +43,8 @@ const withTimeout = <T>(promise: Promise<T>, ms: number): Promise<T> => {
   return Promise.race([promise, timeout])
 }
 
+const qualitySuffix = 'Photography Settings: f/1.8 aperture for depth of field, ISO 100 for grain-free clarity, 85mm lens for flattering portraits. Lighting: Studio strobe setup with rim light. Render: Unreal Engine 5, Octane Render, 8k.'
+
 export const generateImage = ({
   model,
   systemInstruction,
@@ -55,14 +57,24 @@ export const generateImage = ({
       try {
         let resultData: string | undefined
 
+        // Construct a cohesive visual description
+        // 1. We want the system instruction (which contains the style)
+        // 2. We want the explicit user prompt and layout
+        // 3. We want the technical quality boosters
+        const combinedPrompt = `
+${systemInstruction}
+
+IMAGE DESCRIPTION:
+${prompt}
+
+${qualitySuffix}
+`.trim()
+
         if (isImagen) {
-          // For Imagen (generateImages)
-          // Append system instruction to prompt as Imagen doesn't support systemInstruction
-          const fullPrompt = `${systemInstruction}\n\n${prompt}`
-          
+          // For Imagen, we send the combined prompt directly
           const modelPromise = ai.models.generateImages({
             model,
-            prompt: fullPrompt,
+            prompt: combinedPrompt,
             config: {
                numberOfImages: 1,
                aspectRatio: '16:9',
@@ -75,11 +87,12 @@ export const generateImage = ({
             resultData = `data:image/jpeg;base64,${base64}`
           }
         } else {
-          // For Flash Image (generateContent with responseModalities)
+          // For Flash Image (generateContent), we can keep systemInstruction separate
+          // but prompt must be strong.
           const modelPromise = ai.models.generateContent({
             model,
             config: {
-              systemInstruction,
+              systemInstruction: systemInstruction,
               safetySettings,
               responseModalities: [Modality.IMAGE]
             },
@@ -96,7 +109,7 @@ export const generateImage = ({
                         }
                       ]
                     : []),
-                  {text: prompt}
+                  {text: `${prompt}\n\n${qualitySuffix}`}
                 ]
               }
             ]
