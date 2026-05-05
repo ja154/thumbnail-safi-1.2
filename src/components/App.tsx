@@ -49,6 +49,8 @@ export function App() {
       }
     }
     processHash()
+    window.addEventListener('hashchange', processHash)
+    return () => window.removeEventListener('hashchange', processHash)
   }, [])
 
   return (

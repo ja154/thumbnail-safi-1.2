@@ -18,6 +18,7 @@ type FeedItemProps = {
 
 const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
   const [showSystemInstruction, setShowSystemInstruction] = useState(false)
+  const [copiedField, setCopiedField] = useState<string | null>(null)
 
   // Filter outputs based on showOnlyFavorited prop
   const filteredOutputs = showOnlyFavorited
@@ -66,6 +67,12 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
         versusModels: activeModels
       }
     }
+  }
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text)
+    setCopiedField(field)
+    setTimeout(() => setCopiedField(null), 2000)
   }
 
   return (
@@ -133,23 +140,50 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
       
       {round.seoMetadata && (
         <div className="mt-4 p-4 bg-bg-quaternary rounded-lg border border-border-primary text-text-primary w-full">
-            <div className="flex gap-2 items-center mb-2 text-text-secondary text-xs uppercase tracking-wider font-bold">
+            <div className="flex gap-2 items-center mb-4 text-text-secondary text-xs uppercase tracking-wider font-bold border-b border-border-secondary pb-2">
                 <span className="icon text-sm">search</span> SEO Metadata
             </div>
-            <div className="grid gap-3">
-                <div>
-                    <div className="text-xs text-text-tertiary mb-1">Video Title</div>
-                    <div className="font-bold text-lg">{round.seoMetadata.title}</div>
+            <div className="grid gap-4">
+                <div className="relative group">
+                    <div className="flex justify-between items-center mb-1">
+                        <div className="text-xs text-text-tertiary">Video Title</div>
+                        <button 
+                            onClick={() => copyToClipboard(round.seoMetadata!.title, 'title')}
+                            className="flex items-center gap-1 text-xs bg-bg-primary border border-border-secondary px-2 py-1 rounded hover:bg-bg-secondary transition-colors"
+                        >
+                            <span className="icon text-[12px]">{copiedField === 'title' ? 'check' : 'content_copy'}</span>
+                            {copiedField === 'title' ? 'Copied' : 'Copy'}
+                        </button>
+                    </div>
+                    <div className="font-bold text-lg leading-tight">{round.seoMetadata.title}</div>
                 </div>
-                 <div>
-                    <div className="text-xs text-text-tertiary mb-1">Description</div>
-                    <div className="text-sm opacity-80">{round.seoMetadata.description}</div>
+                 <div className="relative group">
+                    <div className="flex justify-between items-center mb-1">
+                        <div className="text-xs text-text-tertiary">Description</div>
+                        <button 
+                            onClick={() => copyToClipboard(round.seoMetadata!.description, 'desc')}
+                            className="flex items-center gap-1 text-xs bg-bg-primary border border-border-secondary px-2 py-1 rounded hover:bg-bg-secondary transition-colors"
+                        >
+                            <span className="icon text-[12px]">{copiedField === 'desc' ? 'check' : 'content_copy'}</span>
+                            {copiedField === 'desc' ? 'Copied' : 'Copy'}
+                        </button>
+                    </div>
+                    <div className="text-sm opacity-90 whitespace-pre-wrap">{round.seoMetadata.description}</div>
                 </div>
-                 <div>
-                    <div className="text-xs text-text-tertiary mb-1">Tags</div>
+                 <div className="relative group">
+                    <div className="flex justify-between items-center mb-1">
+                        <div className="text-xs text-text-tertiary">Tags</div>
+                         <button 
+                            onClick={() => copyToClipboard(round.seoMetadata!.tags.join(', '), 'tags')}
+                            className="flex items-center gap-1 text-xs bg-bg-primary border border-border-secondary px-2 py-1 rounded hover:bg-bg-secondary transition-colors"
+                        >
+                            <span className="icon text-[12px]">{copiedField === 'tags' ? 'check' : 'content_copy'}</span>
+                            {copiedField === 'tags' ? 'Copied' : 'Copy'}
+                        </button>
+                    </div>
                     <div className="flex flex-wrap gap-2">
                         {round.seoMetadata.tags.map(tag => (
-                            <span key={tag} className="bg-bg-primary px-2 py-1 rounded text-xs border border-border-secondary">#{tag}</span>
+                            <span key={tag} className="bg-bg-primary px-2 py-1 rounded text-xs border border-border-secondary text-text-secondary">#{tag}</span>
                         ))}
                     </div>
                 </div>

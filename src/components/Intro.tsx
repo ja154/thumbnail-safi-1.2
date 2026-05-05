@@ -9,7 +9,6 @@ import modes, {frontpageOrder} from '../lib/modes'
 import {addRound, setOutputMode, setBatchModel} from '../lib/actions'
 import {use} from '../lib/store'
 import {entries, fromEntries} from '../lib/utils'
-import {FeaturedCollections} from './HighlightCarousel'
 
 export default function Intro() {
   const batchModel = use.batchModel()

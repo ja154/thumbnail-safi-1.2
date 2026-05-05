@@ -256,12 +256,12 @@ export function FullscreenOverlay() {
   const codeTranscript = `
 <strong>System Instructions:</strong>
 
-${activeRound?.systemInstructions}
+${activeRound?.systemInstructions.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}
 
 
 <strong>User:</strong>
 
-${activeRound?.prompt}
+${activeRound?.prompt.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}
 
 
 <strong>Model:</strong>

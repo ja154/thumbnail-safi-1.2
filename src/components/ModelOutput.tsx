@@ -38,6 +38,21 @@ function ModelOutput({output, round}: {output: Output; round: Round}) {
     downloadAnchorNode.remove()
   }
 
+  const downloadImage = () => {
+    if (!output.srcCode) return
+    const link = document.createElement('a')
+    link.href = output.srcCode
+    // Extract extension or default to png
+    let extension = 'png'
+    if (output.srcCode.startsWith('data:image/jpeg')) extension = 'jpg'
+    if (output.srcCode.startsWith('data:image/webp')) extension = 'webp'
+    
+    link.download = `thumbnail_${round.id}_${output.id}.${extension}`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   useEffect(() => {
     if (isBusy) {
       const interval = setInterval(
@@ -113,9 +128,14 @@ function ModelOutput({output, round}: {output: Output; round: Round}) {
             </button>
           )}
 
-          <button className="iconButton" onClick={downloadOutputJSON}>
+          <button className="iconButton" onClick={downloadImage}>
             <span className="icon">download</span>
-            <span className="tooltip">Download JSON</span>
+            <span className="tooltip">Download Image</span>
+          </button>
+
+          <button className="iconButton" onClick={downloadOutputJSON}>
+            <span className="icon">data_object</span>
+            <span className="tooltip">Download JSON Data</span>
           </button>
 
           <button
