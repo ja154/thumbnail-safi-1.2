@@ -17,7 +17,7 @@ type RendererProps = {
 function Renderer({mode, code, isFullscreen}: RendererProps) {
   return (
     <div
-      className={`renderer imageRenderer bg-black`}
+      className={`renderer imageRenderer bg-primary`}
       style={{height: isFullscreen ? '100%' : undefined}}
     >
       <img src={code} alt="Generated thumbnail" className="w-full h-full object-contain" />

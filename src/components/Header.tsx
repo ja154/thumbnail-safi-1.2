@@ -25,12 +25,14 @@ import modes, {frontpageOrder, layouts, layoutOrder} from '../lib/modes'
 import {use} from '../lib/store'
 import type {Preset, ModelKey} from '../lib/types'
 import {shuffle} from 'lodash'
+import {useTheme} from '../lib/useTheme'
 
 export function Header({
   activeCollectionId
 }: {
   activeCollectionId?: string | null
 }) {
+  const {theme, toggleTheme} = useTheme()
   const outputMode = use.outputMode()
   const activeLayout = use.activeLayout()
   const batchModel = use.batchModel()
@@ -399,6 +401,18 @@ export function Header({
             {userRounds.length}
           </button>
           <div className="label">Yours</div>
+        </div>
+        <div className="header-toggle">
+          <button
+            className="circleButton resetButton"
+            onClick={toggleTheme}
+            style={{ fontSize: '20px' }}
+          >
+            <span className="icon">
+              {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+            </span>
+          </button>
+          <div className="label">Theme</div>
         </div>
       </div>
       {isSmallScreen && (

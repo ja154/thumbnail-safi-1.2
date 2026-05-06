@@ -296,7 +296,7 @@ ${activeRound?.prompt.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
 
   return (
     <>
-      <div className="text-white fullscreen fixed overflow-hidden inset-0 bg-black z-300 flex flex-col">
+      <div className="text-primary fullscreen fixed overflow-hidden inset-0 bg-primary z-300 flex flex-col">
         <div
           className="w-full shrink-0 px-[36px]"
           style={{
@@ -438,7 +438,7 @@ ${activeRound?.prompt.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
                 <span className="icon text-base">
                   {fullscreenSound ? 'check_box' : 'check_box_outline_blank'}
                 </span>
-                <span className="text-sm select-none text-white">Sound</span>
+                <span className="text-sm select-none text-primary">Sound</span>
               </button>
             </div>
           </div>

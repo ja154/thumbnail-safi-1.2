@@ -250,7 +250,7 @@ export function Screensaver() {
 
   return (
     <div
-      className="fixed text-white fullscreen inset-0 bg-black z-300 grid"
+      className="fixed text-primary fullscreen inset-0 bg-primary z-300 grid"
       style={{
         gridTemplateColumns: `repeat(${layout.cols}, 1fr)`,
         gridTemplateRows: `repeat(${layout.rows}, 1fr)`
@@ -263,12 +263,12 @@ export function Screensaver() {
             values(round.outputs).some(output => output.id === item)
           )
           
-          if (!activeOutput || !activeRound) return <div key={index} className="w-full h-full bg-black"></div>
+          if (!activeOutput || !activeRound) return <div key={index} className="w-full h-full bg-primary"></div>
 
           return (
             <div
               key={index}
-              className="screensaver-item pointer-events-none bg-black w-full h-full relative overflow-hidden"
+              className="screensaver-item pointer-events-none bg-primary w-full h-full relative overflow-hidden"
             >
               <AnimateTile
                 activeOutput={activeOutput}
@@ -283,7 +283,7 @@ export function Screensaver() {
             </div>
           )
         } else {
-          return <div key={index} className="w-full h-full bg-black"></div>
+          return <div key={index} className="w-full h-full bg-primary"></div>
         }
       })}
       {/* controls */}
@@ -303,10 +303,10 @@ export function Screensaver() {
               setScreensaverSound(!screensaverSound)
             }}
           >
-            <span className="icon text-base text-white">
+            <span className="icon text-base text-primary">
               {screensaverSound ? 'check_box' : 'check_box_outline_blank'}
             </span>
-            <span className="text-sm select-none text-white">Sound</span>
+            <span className="text-sm select-none text-primary">Sound</span>
           </button>
           <button
             className="iconButton"
@@ -433,7 +433,7 @@ export function AnimateTile({
   }, [])
 
   return (
-    <div className="absoute overflow-hidden inset-0 bg-black flex flex-col">
+    <div className="absolute overflow-hidden inset-0 bg-primary flex flex-col">
       <div className="absolute inset-0 overflow-hidden">
         {showRender && (
           <div className="absolute -inset-0.5">
@@ -472,7 +472,7 @@ export function AnimateTile({
 function Info({activeOutput}: {activeOutput: Output}) {
   return (
     <div
-      className={`w-full relative pt-8 px-6 pb-2 flex items-center gap-3 text-white`}
+      className={`w-full relative pt-8 px-6 pb-2 flex items-center gap-3 text-primary`}
     >
       <div className="flex">
         <div className="border border-neutral-400 rounded-full px-4 py-1 text-sm select-none pointer-events-none uppercase">

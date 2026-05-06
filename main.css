@@ -1,6 +1,18 @@
 
 @import "tailwindcss";
 
+:root {
+  color-scheme: light dark;
+}
+
+:root.light {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
 body {
   --base-font: 'Space Mono', monospace;
   --primary: #1e88e5;
