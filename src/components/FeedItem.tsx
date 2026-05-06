@@ -86,7 +86,7 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
             {modes[round.mode]?.emoji} {modes[round.mode]?.name}
           </div>
           <div className="chip">
-             {layouts[round.layout]?.emoji} {layouts[round.layout]?.name.split(' ')[0]}
+             {layouts[round.layout]?.emoji} {layouts[round.layout]?.name?.split(' ')[0]}
           </div>
           <div className="prompt">
             {showSystemInstruction && (

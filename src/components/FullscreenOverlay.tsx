@@ -13,6 +13,7 @@ import {
 } from '../lib/actions'
 import {flatten} from 'lodash'
 import models from '../lib/models'
+import modes from '../lib/modes'
 import type {Output, Round} from '../lib/types'
 import {initializeAudio, playSound} from '../lib/useTonePalette'
 
@@ -256,17 +257,12 @@ export function FullscreenOverlay() {
   const codeTranscript = `
 <strong>System Instructions:</strong>
 
-${activeRound?.systemInstructions.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}
+${activeRound?.systemInstructions.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
 
 
 <strong>User:</strong>
 
-${activeRound?.prompt.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}
-
-
-<strong>Model:</strong>
-
-${activeOutput?.srcCode.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}`
+${activeRound?.prompt.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
 
   // scale fontSize based on prompt length
   const fontMin = 28
@@ -471,14 +467,6 @@ function Info({
   activeOutput: Output
   isNarrow: boolean
 }) {
-  const typeMap = {
-    p5: 'P5.JS',
-    three: 'THREE.JS',
-    glsl: 'SHADER',
-    svg: 'SVG',
-    html: 'HTML'
-  }
-
   const aspectStyles = isNarrow
     ? 'justify-between relative'
     : 'flex-col gap-4 items-start absolute bottom-0 w-3/8'
@@ -489,7 +477,7 @@ function Info({
     >
       <div className="flex">
         <div className="border border-neutral-400 rounded-full px-4 py-1 text-sm select-none pointer-events-none uppercase">
-          {typeMap[activeOutput.mode as keyof typeof typeMap] ||
+          {modes[activeOutput.mode as keyof typeof modes]?.name ||
             activeOutput.mode}
         </div>
       </div>

@@ -11,6 +11,7 @@ import {setFeed, setScreensaverMode, setScreensaverSound} from '../lib/actions'
 import {initializeAudio, playSound} from '../lib/useTonePalette'
 import type {Output, Round} from '../lib/types'
 import models from '../lib/models'
+import modes from '../lib/modes'
 import {scrollToPosition, values} from '../lib/utils'
 
 type Layout = {
@@ -392,28 +393,7 @@ export function AnimateTile({
   const codeRef = useRef<HTMLDivElement>(null)
 
   async function doAnimateCode(): Promise<void> {
-    return new Promise(resolve => {
-      if (!codeRef.current) {
-        resolve()
-        return
-      }
-      clearTimeout(codeTimeoutRef.current)
-      clearInterval(codeIntervalRef.current)
-      codeRef.current!.style.display = 'block'
-      codeRef.current.innerText = activeOutput.srcCode || ''
-      codeTimeoutRef.current = window.setTimeout(async () => {
-        await scrollToPosition(
-          codeRef.current!,
-          codeRef.current!.scrollHeight,
-          2000
-        )
-        codeTimeoutRef.current = window.setTimeout(() => {
-          codeRef.current!.style.display = 'none'
-          codeRef.current!.innerHTML = ''
-          resolve()
-        }, 200)
-      }, 200)
-    })
+    return Promise.resolve()
   }
 
   const runOnceRef = useRef(false)
@@ -490,22 +470,13 @@ export function AnimateTile({
 }
 
 function Info({activeOutput}: {activeOutput: Output}) {
-  const typeMap = {
-    p5: 'P5.JS',
-    three: 'THREE.JS',
-    glsl: 'SHADER',
-    svg: 'SVG',
-    html: 'HTML',
-    image: 'IMAGE'
-  }
-
   return (
     <div
       className={`w-full relative pt-8 px-6 pb-2 flex items-center gap-3 text-white`}
     >
       <div className="flex">
         <div className="border border-neutral-400 rounded-full px-4 py-1 text-sm select-none pointer-events-none uppercase">
-          {typeMap[activeOutput.mode as keyof typeof typeMap] ||
+          {modes[activeOutput.mode as keyof typeof modes]?.name ||
             activeOutput.mode}
         </div>
       </div>

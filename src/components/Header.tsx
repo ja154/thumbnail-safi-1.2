@@ -193,7 +193,7 @@ export function Header({
           }
         >
           <p>
-            {layouts[activeLayout]?.emoji} {layouts[activeLayout]?.name.split(' ')[0]}
+            {layouts[activeLayout]?.emoji} {layouts[activeLayout]?.name?.split(' ')[0]}
           </p>
           <div className={c('selector', {active: showLayouts})}>
             <ul>
