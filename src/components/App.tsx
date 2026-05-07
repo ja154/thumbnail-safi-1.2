@@ -4,6 +4,7 @@
 */
 import Intro from './Intro'
 import {Header} from './Header'
+import {Sidebar} from './Sidebar'
 import {Collection} from './Collection'
 import {use} from '../lib/store'
 import FeedItem from './FeedItem'
@@ -54,44 +55,49 @@ export function App() {
   }, [])
 
   return (
-    <>
-      <Header activeCollectionId={activeCollectionId} />
-      {activeCollectionId ? (
-        <Collection id={activeCollectionId} />
-      ) : activeResultId ? (
-        <Result id={activeResultId} />
-      ) : feed.length === 0 ? (
-        <Intro />
-      ) : (
-        <div>
-          <div
-            className="flex sticky w-full items-center z-100 bg-primary py-2 justify-between text-primary px-3 border-b border-secondary h-auto"
-            style={{top: `${headerHeight}px`}}
-          >
-            <div>Your Generations</div>
-            <button
-              className="chip"
-              onClick={() => {
-                initializeAudio()
-                setScreensaverMode(true)
-              }}
+    <div className="flex flex-col md:flex-row min-h-screen relative w-full">
+      <Sidebar />
+      <div className="flex-1 flex flex-col relative min-w-0 min-h-screen border-l border-secondary">
+        <Header activeCollectionId={activeCollectionId} />
+        <div className="flex-1 flex flex-col overflow-x-hidden relative">
+          {activeCollectionId ? (
+          <Collection id={activeCollectionId} />
+        ) : activeResultId ? (
+          <Result id={activeResultId} />
+        ) : feed.length === 0 ? (
+          <Intro />
+        ) : (
+          <div>
+            <div
+              className="flex sticky w-full items-center z-100 bg-primary py-2 justify-between text-primary px-3 border-b border-secondary h-auto"
+              style={{top: 0}}
             >
-              <span className="icon">🖥️</span>
-              Screensaver Mode
-            </button>
+              <div>Your Generations</div>
+              <button
+                className="chip"
+                onClick={() => {
+                  initializeAudio()
+                  setScreensaverMode(true)
+                }}
+              >
+                <span className="icon">🖥️</span>
+                Screensaver Mode
+              </button>
+            </div>
+            <main>
+              <ul className="feed">
+                {feed.map(round => (
+                  <FeedItem key={round.id} round={round} />
+                ))}
+              </ul>
+            </main>
           </div>
-          <main>
-            <ul className="feed">
-              {feed.map(round => (
-                <FeedItem key={round.id} round={round} />
-              ))}
-            </ul>
-          </main>
+        )}
         </div>
-      )}
-      {fullscreenActiveId && <FullscreenOverlay />}
-      {screensaverMode && <Screensaver />}
-    </>
+        {fullscreenActiveId && <FullscreenOverlay />}
+        {screensaverMode && <Screensaver />}
+      </div>
+    </div>
   )
 }
 

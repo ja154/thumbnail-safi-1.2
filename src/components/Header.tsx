@@ -25,14 +25,12 @@ import modes, {frontpageOrder, layouts, layoutOrder} from '../lib/modes'
 import {use} from '../lib/store'
 import type {Preset, ModelKey} from '../lib/types'
 import {shuffle} from 'lodash'
-import {useTheme} from '../lib/useTheme'
 
 export function Header({
   activeCollectionId
 }: {
   activeCollectionId?: string | null
 }) {
-  const {theme, toggleTheme} = useTheme()
   const outputMode = use.outputMode()
   const activeLayout = use.activeLayout()
   const batchModel = use.batchModel()
@@ -122,24 +120,14 @@ export function Header({
   }, [shufflePresets])
 
   return (
-    <header ref={headerRef} className={showFullHeader ? '' : 'hide'}>
-      <div className="inner-header cursor-pointer">
-        <h1
-          onClick={() => {
-            setActiveCollectionId(null)
-            setActiveResultId(null)
-            setFeed([])
-          }}
-        >
-          <p>
-            Thumbnail<span>🖼️</span>
-          </p>
-          <p>Safi</p>
-        </h1>
+    <div ref={headerRef} className={c('generation-panel bg-primary border-b border-secondary p-4 md:p-6 shadow-sm z-40 relative', {hide: !showFullHeader})}>
+      <div className="flex flex-col gap-4 w-full">
+        <h2 className="text-xl font-bold tracking-tight mb-2">Create New Thumbnail</h2>
         
-        {/* Style Selector */}
-        <div
-          className="selectorWrapper header-toggle"
+        <div className="inner-header flex flex-wrap items-center gap-4 w-full !p-0">
+          {/* Style Selector */}
+          <div
+            className="selectorWrapper header-toggle"
           onMouseEnter={!isTouch ? () => setShowModes(true) : void 0}
           onMouseLeave={!isTouch ? () => setShowModes(false) : void 0}
           onTouchStart={
@@ -390,30 +378,7 @@ export function Header({
             <div className="label">Batch size</div>
           </div>
         )}
-        <div className="header-toggle">
-          <button
-            className="circleButton resetButton"
-            onClick={() => {
-              setActiveCollectionId(null)
-              setFeed(userRounds)
-            }}
-          >
-            {userRounds.length}
-          </button>
-          <div className="label">Yours</div>
-        </div>
-        <div className="header-toggle">
-          <button
-            className="circleButton resetButton"
-            onClick={toggleTheme}
-            style={{ fontSize: '20px' }}
-          >
-            <span className="icon">
-              {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-            </span>
-          </button>
-          <div className="label">Theme</div>
-        </div>
+      </div>
       </div>
       {isSmallScreen && (
         <div
@@ -435,6 +400,6 @@ export function Header({
           </button>
         </div>
       )}
-    </header>
+    </div>
   )
 }
