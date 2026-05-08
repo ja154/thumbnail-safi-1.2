@@ -10,22 +10,24 @@ export function Sidebar() {
 
   return (
     <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-secondary bg-primary flex flex-col pt-8 pb-4 shrink-0 h-auto md:h-screen sticky top-0 overflow-y-auto z-50">
-      <div className="px-6 mb-8 flex flex-col gap-1 items-start">
-        <h1 className="text-2xl font-black uppercase tracking-tighter" style={{
-          backgroundSize: '100% 500%',
-          backgroundImage: 'linear-gradient(0deg, #4158d0 0%, #c850c0 25%, #ffcc70 50%, #c850c0 75%, #4158d0 100%)',
-          color: 'transparent',
-          backgroundClip: 'text',
-          animation: 'gradientFlow 10s ease infinite alternate',
-          lineHeight: '1.2',
-          cursor: 'pointer'
-        }}
-        onClick={() => {
-          setActiveCollectionId(null)
-          setFeed([])
-        }}>
-          Thumbnail<span className="text-primary text-sm relative -top-1 ml-1" style={{color: 'var(--text-primary)'}}>🖼️</span><br />
-          Safi
+      <div className="px-6 mb-8 mt-2 flex flex-col gap-1 items-start">
+        <h1 
+          className="text-2xl font-black tracking-tight cursor-pointer flex flex-col items-start leading-tight"
+          style={{
+            backgroundImage: 'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)',
+            color: 'transparent',
+            backgroundClip: 'text',
+          }}
+          onClick={() => {
+            setActiveCollectionId(null)
+            setFeed([])
+          }}
+        >
+          <div className="flex items-center gap-1.5">
+            <span>Thumbnail</span>
+            <span className="text-xl" style={{color: 'initial'}}>🖼️</span>
+          </div>
+          <span className="text-xl opacity-90">Safi</span>
         </h1>
       </div>
 

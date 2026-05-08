@@ -214,8 +214,8 @@ button {
 
 .button {
   display: inline-flex;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
   gap: 4px;
   align-items: center;
   justify-content: center;
@@ -223,6 +223,7 @@ button {
   color: var(--text-quinary);
   position: relative;
   transition: filter 0.1s ease-in-out;
+  min-height: 48px; /* Set min-height to match input */
 
   &.primary {
     background: var(--primary);
@@ -541,98 +542,59 @@ summary {
   }
 }
 
+/* We removed .inner-header, so just apply directly to .generation-panel or general classes */
 .generation-panel {
   background: var(--bg-primary);
   color: var(--text-primary);
   display: flex;
 
-  .inner-header {
+  .label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  > div > .selectorWrapper, > div > .imageInput {
     display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: stretch;
-    padding: 12px 20px;
-    
-    h1 {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      margin-right: 10px;
-      font-size: 15px;
-      text-transform: uppercase;
-      background-size: 100% 500%;
-      color: transparent;
-      background-image: linear-gradient(
-        0deg,
-        #4158d0 0%,
-        #c850c0 25%,
-        #ffcc70 50%,
-        #c850c0 75%,
-        #4158d0 100%
-      );
-      background-clip: text;
-      animation: gradientFlow 10s ease infinite alternate;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-      span {
-        color: var(--text-primary);
-        font-size: 0.9em;
-        position: relative;
-        top: -2px;
-      }
+  .prompt {
+    flex: 1 1 auto;
+    min-width: 300px;
+    width: 100%;
+  }
+
+  .promptInput {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    height: 48px;
+    width: 100%;
+    background: var(--bg-secondary);
+    border: 2px solid var(--border-primary);
+    color: var(--text-primary);
+    transition: all 0.2s;
+
+    &:focus {
+      background: var(--bg-primary);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(65, 88, 208, 0.1);
+      outline: none;
     }
+  }
 
-    > div {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+  .batchSize {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
 
-      &:has(.toggle),
-      &:has(.resetButton) {
-        gap: 5px;
-      }
-    }
-
-    .label {
-      font-size: 12px;
-      color: var(--text-tertiary);
-    }
-
-    .rangeWrap {
-      flex: 1;
-      display: flex;
-      align-items: center;
-    }
-
-    .prompt {
-      flex: 1 1 200px;
-      min-width: 200px;
-    }
-
-    .promptInput {
-      /* border: 1px solid var(--primary); */
-      padding: 10px;
-      border-radius: 4px;
-      font-size: 12px;
-      height: 36px;
-      /* width: 100%; */
-      overflow: hidden;
-
-      &:focus {
-        background: rgba(255, 255, 255, 0.03);
-      }
-    }
-
-    .batchSize {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-
-      input {
-        width: 70px;
-        padding: 0;
-      }
+    input {
+      width: 70px;
+      padding: 0;
     }
   }
 }
