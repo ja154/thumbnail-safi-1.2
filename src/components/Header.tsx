@@ -120,11 +120,9 @@ export function Header({
   }, [shufflePresets])
 
   return (
-    <div ref={headerRef} className={c('generation-panel bg-primary border-b border-secondary p-6 md:p-8 shadow-sm z-40 relative', {hide: !showFullHeader})}>
-      <div className="flex flex-col gap-6 w-full max-w-5xl mx-auto">
-        <h2 className="text-2xl font-bold tracking-tight">Create New Thumbnail</h2>
-        
-        <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center gap-6 w-full">
+    <div ref={headerRef} className={c('generation-panel bg-primary/95 backdrop-blur-lg border-t border-secondary p-4 md:p-6 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] relative w-full transition-all duration-300', {hide: !showFullHeader})}>
+      <div className="flex flex-col gap-4 w-full max-w-5xl mx-auto">
+        <div className="flex flex-col md:flex-row flex-wrap items-end md:items-center gap-4 w-full">
           {/* Style Selector */}
           <div
             className="selectorWrapper header-toggle"

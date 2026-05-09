@@ -58,7 +58,6 @@ export function App() {
     <div className="flex flex-col md:flex-row min-h-screen relative w-full">
       <Sidebar />
       <div className="flex-1 flex flex-col relative min-w-0 min-h-screen border-l border-secondary">
-        <Header activeCollectionId={activeCollectionId} />
         <div className="flex-1 flex flex-col overflow-x-hidden relative">
           {activeCollectionId ? (
           <Collection id={activeCollectionId} />
@@ -67,9 +66,9 @@ export function App() {
         ) : feed.length === 0 ? (
           <Intro />
         ) : (
-          <div>
+          <div className="pb-40">
             <div
-              className="flex sticky w-full items-center z-100 bg-primary py-2 justify-between text-primary px-3 border-b border-secondary h-auto"
+              className="flex sticky w-full items-center z-40 bg-primary py-2 justify-between text-primary px-3 border-b border-secondary h-auto"
               style={{top: 0}}
             >
               <div>Your Generations</div>
@@ -94,6 +93,12 @@ export function App() {
           </div>
         )}
         </div>
+        
+        {/* Bottom Generation Dock */}
+        <div className="sticky bottom-0 left-0 w-full z-50">
+          <Header activeCollectionId={activeCollectionId} />
+        </div>
+
         {fullscreenActiveId && <FullscreenOverlay />}
         {screensaverMode && <Screensaver />}
       </div>

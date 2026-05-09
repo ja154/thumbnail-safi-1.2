@@ -31,8 +31,8 @@ const models = {
 } as const
 
 export const activeModelKeys = [
-  'imagen',
-  'flashImage'
+  'flashImage',
+  'imagen'
 ] as const
 
 export type ActiveModelKey = (typeof activeModelKeys)[number]

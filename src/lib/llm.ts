@@ -19,8 +19,8 @@ import type {SeoMetadata} from './types'
 const timeoutMs = 193_333
 const maxRetries = 3
 const baseDelay = 1_233
-// Use standard API_KEY env var as per guidelines
-const ai = new GoogleGenAI({apiKey: process.env.API_KEY})
+// Use standard GEMINI_API_KEY env var as per guidelines
+const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY})
 
 type LlmGenParams = {
   model: string
@@ -143,7 +143,7 @@ ${qualitySuffix}
 export const generateSeoMetadata = async (prompt: string): Promise<SeoMetadata> => {
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       config: {
         responseMimeType: 'application/json',
         responseSchema: {

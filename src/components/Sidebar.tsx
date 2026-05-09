@@ -12,12 +12,7 @@ export function Sidebar() {
     <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-secondary bg-primary flex flex-col pt-8 pb-4 shrink-0 h-auto md:h-screen sticky top-0 overflow-y-auto z-50">
       <div className="px-6 mb-8 mt-2 flex flex-col gap-1 items-start">
         <h1 
-          className="text-2xl font-black tracking-tight cursor-pointer flex flex-col items-start leading-tight"
-          style={{
-            backgroundImage: 'linear-gradient(to right, #4facfe 0%, #00f2fe 100%)',
-            color: 'transparent',
-            backgroundClip: 'text',
-          }}
+          className="text-2xl font-black tracking-tight cursor-pointer flex flex-col items-start leading-tight text-primary transition-opacity hover:opacity-80"
           onClick={() => {
             setActiveCollectionId(null)
             setFeed([])
@@ -25,7 +20,7 @@ export function Sidebar() {
         >
           <div className="flex items-center gap-1.5">
             <span>Thumbnail</span>
-            <span className="text-xl" style={{color: 'initial'}}>🖼️</span>
+            <span className="text-xl">🖼️</span>
           </div>
           <span className="text-xl opacity-90">Safi</span>
         </h1>
