@@ -20,15 +20,16 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
   const [showSystemInstruction, setShowSystemInstruction] = useState(false)
   const [copiedField, setCopiedField] = useState<string | null>(null)
 
-  // Filter outputs based on showOnlyFavorited prop
-  const filteredOutputs = showOnlyFavorited
-    ? values(round.outputs).filter(
-        output => round.favoritedOutputIds?.includes(output.id)
-      )
-    : values(round.outputs)
+  // Filter outputs based on showOnlyFavorited prop and ensure model exists
+  const filteredOutputs = values(round.outputs).filter(output => {
+    if (showOnlyFavorited && !round.favoritedOutputIds?.includes(output.id)) {
+      return false
+    }
+    return models[output.model] !== undefined
+  })
 
-  // Don't render if showing favorites but none exist
-  if (showOnlyFavorited && filteredOutputs.length === 0) {
+  // Don't render if no outputs are left to show
+  if (filteredOutputs.length === 0) {
     return null
   }
 
@@ -39,25 +40,25 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
 
   // Infer the original configuration from the round's outputs
   const inferRoundConfig = () => {
-    const outputs = values(round.outputs)
-    if (outputs.length === 0) return {}
+    const validOutputs = values(round.outputs).filter(output => models[output.model] !== undefined)
+    if (validOutputs.length === 0) return {}
 
     // Check if all outputs use the same model (batch mode)
-    const firstModel = outputs[0]!.model
-    const isBatchMode = outputs.every(output => output.model === firstModel)
+    const firstModel = validOutputs[0]!.model
+    const isBatchMode = validOutputs.every(output => output.model === firstModel)
 
     if (isBatchMode) {
       return {
         outputMode: round.mode,
         activeLayout: round.layout,
         batchMode: true,
-        batchSize: outputs.length,
+        batchSize: validOutputs.length,
         batchModel: firstModel
       }
     } else {
       // Versus mode - reconstruct which models were active
       const activeModels: {[key: string]: boolean} = {}
-      outputs.forEach(output => {
+      validOutputs.forEach(output => {
         activeModels[output.model] = true
       })
       return {

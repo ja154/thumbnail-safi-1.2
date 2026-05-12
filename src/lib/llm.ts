@@ -143,7 +143,7 @@ ${qualitySuffix}
 export const generateSeoMetadata = async (prompt: string): Promise<SeoMetadata> => {
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
+      model: 'gemini-2.5-flash',
       config: {
         responseMimeType: 'application/json',
         responseSchema: {
