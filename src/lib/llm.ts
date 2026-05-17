@@ -29,6 +29,7 @@ type LlmGenParams = {
   promptImage: string | null
   isImagen: boolean
   isImageOutput: boolean
+  count?: number
 }
 
 const limiter = limit(9)
@@ -49,12 +50,13 @@ export const generateImage = ({
   systemInstruction,
   prompt,
   promptImage,
-  isImagen
-}: LlmGenParams) =>
+  isImagen,
+  count = 1
+}: LlmGenParams): Promise<string[]> =>
   limiter(async () => {
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
-        let resultData: string | undefined
+        let resultData: string[] = []
 
         // Construct a cohesive visual description
         // 1. We want the system instruction (which contains the style)
@@ -75,19 +77,22 @@ ${qualitySuffix}
             model,
             prompt: combinedPrompt,
             config: {
-               numberOfImages: 1,
+               numberOfImages: count,
                aspectRatio: '16:9',
                outputMimeType: 'image/jpeg'
             }
           })
           const response: GenerateImagesResponse = await withTimeout(modelPromise, timeoutMs)
-          const base64 = response.generatedImages?.[0]?.image?.imageBytes
-          if (base64) {
-            resultData = `data:image/jpeg;base64,${base64}`
+          const base64List = response.generatedImages
+            ?.map(img => img.image?.imageBytes)
+            .filter(Boolean) as string[]
+          
+          if (base64List && base64List.length > 0) {
+            resultData = base64List.map(base64 => `data:image/jpeg;base64,${base64}`)
           }
         } else {
           // For Flash Image (generateContent), we can keep systemInstruction separate
-          // but prompt must be strong.
+          // but prompt must be strong. It does not support multiple images directly via numberOfImages but we only use Imagen mostly now.
           const modelPromise = ai.models.generateContent({
             model,
             config: {
@@ -122,11 +127,11 @@ ${qualitySuffix}
           )?.inlineData?.data
 
           if (data) {
-            resultData = 'data:image/png;base64,' + data
+            resultData = ['data:image/png;base64,' + data]
           }
         }
 
-        if (!resultData) {
+        if (resultData.length === 0) {
           throw new Error('No image data found')
         }
         return resultData

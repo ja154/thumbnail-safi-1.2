@@ -121,58 +121,81 @@ export const addRound = async (
      })
   })
 
-  values(newRound.outputs).forEach(async output => {
-    let res
+  // Group outputs by model
+  const outputsByModel = new Map<ModelKey, Output[]>()
+  values(newRound.outputs).forEach(output => {
+    if (!outputsByModel.has(output.model)) {
+      outputsByModel.set(output.model, [])
+    }
+    outputsByModel.get(output.model)!.push(output)
+  })
 
-    if (models[output.model] === undefined) {
-      console.error(`Model ${output.model} not found`)
+  // Fetch for each distinct model
+  Array.from(outputsByModel.entries()).forEach(async ([modelKey, outputs]) => {
+    if (models[modelKey] === undefined) {
+      console.error(`Model ${modelKey} not found`)
       return
     }
 
+    let results: string[] = []
+
     try {
-      res = await generateImage({
-        model: models[output.model]!.modelString,
+      results = await generateImage({
+        model: models[modelKey]!.modelString,
         systemInstruction: systemInstruction,
         prompt: fullPrompt, // Use prompt with layout instruction
         promptImage: newRound.inputImage,
-        isImagen: models[output.model]!.isImagen,
-        isImageOutput: true
+        isImagen: models[modelKey]!.isImagen,
+        isImageOutput: true,
+        count: outputs.length
       })
     } catch (e) {
       console.error(e)
       set(state => {
         const round = state.feed.find(round => round.id === newRound.id)
         if (!round) return
-        const o = round.outputs[output.id]
-        if (o) o.state = 'error'
+        outputs.forEach(output => {
+          const o = round.outputs[output.id]
+          if (o) o.state = 'error'
+        })
       })
       return
     } finally {
       set(state => {
-        const o = state.feed.find(round => round.id === newRound.id)?.outputs[
-          output.id
-        ]
-        if (o) o.totalTime = Date.now() - o.startTime
+        const round = state.feed.find(round => round.id === newRound.id)
+        if (!round) return
+        outputs.forEach(output => {
+          const o = round.outputs[output.id]
+          if (o) o.totalTime = Date.now() - o.startTime
+        })
       })
     }
 
-    if (res) {
+    if (results && results.length > 0) {
       set(state => {
         const round = state.feed.find(round => round.id === newRound.id)
         if (!round) return
-        const o = round.outputs[output.id]
+        
+        outputs.forEach((output, index) => {
+          const res = results[index]
+          const o = round.outputs[output.id]
+          
+          if (o) {
+            if (res) {
+              o.srcCode = res
+              o.state = 'success'
+            } else {
+              o.state = 'error'
+            }
 
-        if (o) {
-          o.srcCode = res
-          o.state = 'success'
-
-          const userRound = state.userRounds.find(
-            round => round.id === newRound.id
-          )
-          if (userRound) {
-            userRound.outputs[output.id] = o
+            const userRound = state.userRounds.find(
+              r => r.id === newRound.id
+            )
+            if (userRound && userRound.outputs[output.id]) {
+              userRound.outputs[output.id] = o
+            }
           }
-        }
+        })
       })
     }
   })
