@@ -175,7 +175,7 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
                     <div className="flex justify-between items-center mb-1">
                         <div className="text-xs text-text-tertiary">Tags</div>
                          <button 
-                            onClick={() => copyToClipboard(round.seoMetadata!.tags.join(', '), 'tags')}
+                            onClick={() => copyToClipboard(round.seoMetadata?.tags?.join(', ') || '', 'tags')}
                             className="flex items-center gap-1 text-xs bg-bg-primary border border-border-secondary px-2 py-1 rounded hover:bg-bg-secondary transition-colors"
                         >
                             <span className="icon text-[12px]">{copiedField === 'tags' ? 'check' : 'content_copy'}</span>
@@ -183,7 +183,7 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
                         </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                        {round.seoMetadata.tags.map(tag => (
+                        {(round.seoMetadata?.tags || []).map(tag => (
                             <span key={tag} className="bg-bg-primary px-2 py-1 rounded text-xs border border-border-secondary text-text-secondary">#{tag}</span>
                         ))}
                     </div>

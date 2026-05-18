@@ -93,42 +93,49 @@ ${qualitySuffix}
         } else {
           // For Flash Image (generateContent), we can keep systemInstruction separate
           // but prompt must be strong. It does not support multiple images directly via numberOfImages but we only use Imagen mostly now.
-          const modelPromise = ai.models.generateContent({
-            model,
-            config: {
-              systemInstruction: systemInstruction,
-              safetySettings,
-              imageConfig: {
-                aspectRatio: '16:9'
-              }
-            },
-            contents: [
-              {
-                parts: [
-                  ...(promptImage
-                    ? [
-                        {
-                          inlineData: {
-                            data: promptImage.split(',')[1],
-                            mimeType: 'image/png'
+          const runSingle = async () => {
+            const modelPromise = ai.models.generateContent({
+              model,
+              config: {
+                systemInstruction: systemInstruction,
+                safetySettings,
+                imageConfig: {
+                  aspectRatio: '16:9'
+                }
+              },
+              contents: [
+                {
+                  parts: [
+                    ...(promptImage
+                      ? [
+                          {
+                            inlineData: {
+                              data: promptImage.split(',')[1],
+                              mimeType: 'image/png'
+                            }
                           }
-                        }
-                      ]
-                    : []),
-                  {text: `${prompt}\n\n${qualitySuffix}`}
-                ]
-              }
-            ]
-          })
+                        ]
+                      : []),
+                    {text: `${prompt}\n\n${qualitySuffix}`}
+                  ]
+                }
+              ]
+            })
 
-          const response: GenerateContentResponse = await withTimeout(modelPromise, timeoutMs)
-          const data = response.candidates?.[0]?.content?.parts?.find(
-            (p: Part) => p.inlineData
-          )?.inlineData?.data
+            const response: GenerateContentResponse = await withTimeout(modelPromise, timeoutMs)
+            const data = response.candidates?.[0]?.content?.parts?.find(
+              (p: Part) => p.inlineData
+            )?.inlineData?.data
 
-          if (data) {
-            resultData = ['data:image/png;base64,' + data]
+            if (data) {
+              return 'data:image/png;base64,' + data
+            }
+            return null
           }
+          
+          const promises = Array(count).fill(0).map(() => runSingle())
+          const allResults = await Promise.all(promises)
+          resultData = allResults.filter(Boolean) as string[]
         }
 
         if (resultData.length === 0) {
@@ -148,7 +155,7 @@ ${qualitySuffix}
 export const generateSeoMetadata = async (prompt: string): Promise<SeoMetadata> => {
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       config: {
         responseMimeType: 'application/json',
         responseSchema: {

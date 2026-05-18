@@ -38,7 +38,8 @@ const initialState: AppState = {
   batchSize: 3,
   batchModel: activeModelKeys[0],
   versusModels: {
-    imagen: true
+    flashImage: true,
+    imagen: false
   },
   fullscreenAnimate: true,
   activeCollectionId: null,
