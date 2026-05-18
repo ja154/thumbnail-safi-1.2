@@ -16,9 +16,9 @@ import {
 import limit from 'p-limit'
 import type {SeoMetadata} from './types'
 
-const timeoutMs = 193_333
-const maxRetries = 3
-const baseDelay = 1_233
+const timeoutMs = 60_000
+const maxRetries = 2
+const baseDelay = 1_000
 // Use standard GEMINI_API_KEY env var as per guidelines
 const ai = new GoogleGenAI({apiKey: process.env.GEMINI_API_KEY})
 
@@ -83,8 +83,8 @@ ${qualitySuffix}
             }
           })
           const response: GenerateImagesResponse = await withTimeout(modelPromise, timeoutMs)
-          const base64List = response.generatedImages
-            ?.map(img => img.image?.imageBytes)
+          const base64List = (response.generatedImages || [])
+            .map(img => img.image?.imageBytes)
             .filter(Boolean) as string[]
           
           if (base64List && base64List.length > 0) {

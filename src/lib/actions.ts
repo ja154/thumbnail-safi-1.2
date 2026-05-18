@@ -140,15 +140,59 @@ export const addRound = async (
     let results: string[] = []
 
     try {
-      results = await generateImage({
-        model: models[modelKey]!.modelString,
-        systemInstruction: systemInstruction,
-        prompt: fullPrompt, // Use prompt with layout instruction
-        promptImage: newRound.inputImage,
-        isImagen: models[modelKey]!.isImagen,
-        isImageOutput: true,
-        count: outputs.length
-      })
+      if (models[modelKey]!.isImagen) {
+        // Fetch all in one go
+        results = await generateImage({
+          model: models[modelKey]!.modelString,
+          systemInstruction: systemInstruction,
+          prompt: fullPrompt,
+          promptImage: newRound.inputImage,
+          isImagen: true,
+          isImageOutput: true,
+          count: outputs.length
+        })
+      } else {
+        // Fetch sequentially or independently so we don't have to wait for all
+        // Actually, we can fetch them in parallel and update the state as each finishes
+        outputs.forEach(async (output) => {
+           try {
+              const res = await generateImage({
+                model: models[modelKey]!.modelString,
+                systemInstruction: systemInstruction,
+                prompt: fullPrompt,
+                promptImage: newRound.inputImage,
+                isImagen: false,
+                isImageOutput: true,
+                count: 1
+              })
+              
+              if (res && res.length > 0) {
+                 set(state => {
+                    const round = state.feed.find(r => r.id === newRound.id)
+                    if (!round) return
+                    const o = round.outputs[output.id]
+                    if (o) {
+                       o.srcCode = res[0]
+                       o.state = 'success'
+                       o.totalTime = Date.now() - o.startTime
+                       const userRound = state.userRounds.find(r => r.id === newRound.id)
+                       if (userRound && userRound.outputs[output.id]) {
+                          userRound.outputs[output.id] = o
+                       }
+                    }
+                 })
+              }
+           } catch (e) {
+              set(state => {
+                const round = state.feed.find(r => r.id === newRound.id)
+                if (!round) return
+                const o = round.outputs[output.id]
+                if (o) o.state = 'error'
+              })
+           }
+        })
+        return // We handle updates inside the forEach
+      }
     } catch (e) {
       console.error(e)
       set(state => {
@@ -161,17 +205,19 @@ export const addRound = async (
       })
       return
     } finally {
-      set(state => {
-        const round = state.feed.find(round => round.id === newRound.id)
-        if (!round) return
-        outputs.forEach(output => {
-          const o = round.outputs[output.id]
-          if (o) o.totalTime = Date.now() - o.startTime
-        })
-      })
+      if (models[modelKey]!.isImagen) {
+         set(state => {
+           const round = state.feed.find(round => round.id === newRound.id)
+           if (!round) return
+           outputs.forEach(output => {
+             const o = round.outputs[output.id]
+             if (o) o.totalTime = Date.now() - o.startTime
+           })
+         })
+      }
     }
 
-    if (results && results.length > 0) {
+    if (models[modelKey]!.isImagen && results && results.length > 0) {
       set(state => {
         const round = state.feed.find(round => round.id === newRound.id)
         if (!round) return
