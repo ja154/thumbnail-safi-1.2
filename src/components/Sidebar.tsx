@@ -12,17 +12,16 @@ export function Sidebar() {
     <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-secondary bg-primary flex flex-col pt-8 pb-4 shrink-0 h-auto md:h-screen sticky top-0 overflow-y-auto z-50">
       <div className="px-6 mb-8 mt-2 flex flex-col gap-1 items-start">
         <h1 
-          className="text-2xl font-black tracking-tight cursor-pointer flex flex-col items-start leading-tight text-primary transition-opacity hover:opacity-80"
+          className="text-2xl font-bold tracking-tighter cursor-pointer flex flex-col items-start leading-[1.1] text-primary transition-opacity hover:opacity-80"
           onClick={() => {
             setActiveCollectionId(null)
             setFeed([])
           }}
         >
-          <div className="flex items-center gap-1.5">
-            <span>Thumbnail</span>
-            <span className="text-xl">🖼️</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[26px]">Thumbnail</span>
           </div>
-          <span className="text-xl opacity-90">Safi</span>
+          <span className="text-xl font-medium text-tertiary">Safi</span>
         </h1>
       </div>
 

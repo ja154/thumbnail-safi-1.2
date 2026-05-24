@@ -68,10 +68,10 @@ export function App() {
         ) : (
           <div className="pb-40">
             <div
-              className="flex sticky w-full items-center z-40 bg-primary py-2 justify-between text-primary px-3 border-b border-secondary h-auto"
+              className="flex sticky w-full items-center z-40 bg-primary/95 backdrop-blur-sm py-4 justify-between text-primary px-6 pr-8 border-b border-secondary h-auto"
               style={{top: 0}}
             >
-              <div>Your Generations</div>
+              <h2 className="text-lg font-semibold tracking-tight">Your Generations</h2>
               <button
                 className="chip"
                 onClick={() => {
@@ -79,8 +79,8 @@ export function App() {
                   setScreensaverMode(true)
                 }}
               >
-                <span className="icon">🖥️</span>
-                Screensaver Mode
+                <span className="icon">desktop_windows</span>
+                Screensaver
               </button>
             </div>
             <main>
