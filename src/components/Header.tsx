@@ -120,7 +120,7 @@ export function Header({
   }, [shufflePresets])
 
   return (
-    <div ref={headerRef} className={c('generation-panel bg-primary/95 backdrop-blur-xl border-t border-secondary p-4 shadow-sm relative w-full transition-all duration-300 z-50', {hide: !showFullHeader})}>
+    <div ref={headerRef} className={c('generation-panel bg-bg-primary/95 backdrop-blur-xl border-t border-border-primary p-4 md:p-6 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] relative w-full transition-all duration-300 z-50', {hide: !showFullHeader})}>
       <div className="flex flex-col gap-4 w-full max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row flex-wrap items-end md:items-center justify-between gap-6 w-full">
           {/* Style Selector */}

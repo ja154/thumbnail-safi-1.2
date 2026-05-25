@@ -82,49 +82,51 @@ const FeedItem: FC<FeedItemProps> = ({round, showOnlyFavorited}) => {
       style={{maxWidth: 20 * 2 + numOutputs * 700 + (numOutputs - 1) * 20}}
     >
       <div className={c('header', {anchorTop: showSystemInstruction})}>
-        <h3 className={c({anchorTop: showSystemInstruction})}>
-          <div className="chip">
-            {modes[round.mode]?.emoji} {modes[round.mode]?.name}
+        <div className={c('flex flex-col gap-3', {anchorTop: showSystemInstruction})}>
+          <div className="flex gap-2 items-center flex-wrap">
+            <div className="chip">
+              {modes[round.mode]?.emoji} {modes[round.mode]?.name}
+            </div>
+            <div className="chip">
+               {layouts[round.layout]?.emoji} {layouts[round.layout]?.name?.split(' ')[0]}
+            </div>
           </div>
-          <div className="chip">
-             {layouts[round.layout]?.emoji} {layouts[round.layout]?.name?.split(' ')[0]}
-          </div>
-          <div className="prompt">
+          <div className="prompt bg-bg-secondary p-4 rounded-xl border border-border-primary flex-1">
             {showSystemInstruction && (
-              <p className="systemInstruction">
+              <p className="systemInstruction text-sm text-text-tertiary mb-3 italic pb-3 border-b border-border-secondary">
                 {modes[round.mode]?.systemInstruction}
               </p>
             )}
-            <p>{round.prompt}</p>
+            <p className="text-text-primary text-[15px] leading-relaxed break-words">{round.prompt}</p>
           </div>
-        </h3>
-        <div className="actions">
+        </div>
+        <div className="actions mt-3">
           <button
-            className="iconButton"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-bg-secondary text-text-secondary hover:bg-bg-tertiary hover:text-text-primary transition-colors border border-border-secondary"
             onClick={() => setShowSystemInstruction(!showSystemInstruction)}
           >
-            <span className="icon">subject</span>
+            <span className="icon text-[18px]">subject</span>
             <span className="tooltip">
               {showSystemInstruction ? 'Hide' : 'Show'} system instruction
             </span>
           </button>
 
           <button
-            className="iconButton"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-bg-secondary text-text-secondary hover:bg-bg-tertiary hover:text-text-primary transition-colors border border-border-secondary"
             onClick={() =>
               addRound(round.prompt, round.inputImage, inferRoundConfig())
             }
           >
-            <span className="icon">refresh</span>
+            <span className="icon text-[18px]">refresh</span>
             <span className="tooltip">Re-run prompt</span>
           </button>
 
           {round.createdBy === 'anonymous' && (
             <button
-              className="iconButton"
+              className="flex items-center justify-center w-8 h-8 rounded-full bg-bg-secondary text-error hover:bg-error/10 transition-colors border border-border-secondary"
               onClick={() => removeRound(round.id)}
             >
-              <span className="icon">delete</span>
+              <span className="icon text-[18px]">delete</span>
               <span className="tooltip">Remove</span>
             </button>
           )}

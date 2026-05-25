@@ -57,7 +57,7 @@ export function App() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen relative w-full">
       <Sidebar />
-      <div className="flex-1 flex flex-col relative min-w-0 min-h-screen border-l border-secondary">
+      <div className="flex-1 flex flex-col relative min-w-0 min-h-screen border-l border-border-primary bg-bg-primary">
         <div className="flex-1 flex flex-col overflow-x-hidden relative">
           {activeCollectionId ? (
           <Collection id={activeCollectionId} />
@@ -68,12 +68,12 @@ export function App() {
         ) : (
           <div className="pb-40">
             <div
-              className="flex sticky w-full items-center z-40 bg-primary/95 backdrop-blur-sm py-4 justify-between text-primary px-6 pr-8 border-b border-secondary h-auto"
+              className="flex sticky w-full items-center z-40 bg-bg-primary/95 backdrop-blur-md py-4 justify-between text-text-primary px-6 pr-8 border-b border-border-primary h-auto"
               style={{top: 0}}
             >
-              <h2 className="text-lg font-semibold tracking-tight">Your Generations</h2>
+              <h2 className="text-xl font-bold tracking-tight text-text-primary">Your Generations</h2>
               <button
-                className="chip"
+                className="chip primary flex items-center gap-2 px-4 py-2 hover:brightness-110 transition-all font-medium text-sm"
                 onClick={() => {
                   initializeAudio()
                   setScreensaverMode(true)

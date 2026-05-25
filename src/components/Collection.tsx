@@ -81,11 +81,11 @@ export function Collection({id}: {id: string}) {
   return (
     <div>
       <div
-        className="flex sticky w-full z-100 bg-primary py-2 justify-between text-primary px-3 border-b border-secondary h-auto"
+        className="flex sticky w-full z-40 bg-bg-primary/95 backdrop-blur-md py-4 justify-between text-text-primary px-6 pr-8 border-b border-border-primary h-auto"
         style={{top: `${headerHeight}px`}}
       >
-        <div className="flex gap-2 items-center">
-          <span className="text-tertiary">Collection:</span>
+        <div className="flex gap-3 items-center">
+          <span className="text-text-tertiary font-medium">Collection /</span>
           <div className="selectorWrapper shorter">
             <select
               value={collectionData.id}
@@ -93,11 +93,14 @@ export function Collection({id}: {id: string}) {
                 // setParam('collection', e.target.value)
                 setActiveCollectionId(e.target.value)
               }}
-              className="border-primary rounded"
+              className="bg-bg-secondary border border-border-secondary rounded-lg text-text-primary text-sm font-medium focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-shadow"
               style={{
-                borderStyle: 'solid',
-                borderWidth: '1px',
-                padding: '4px 24px 6px 12px'
+                padding: '6px 32px 6px 12px',
+                appearance: 'none',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%23a1a1aa\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 8px center',
+                backgroundSize: '16px'
               }}
             >
               {collections
@@ -110,9 +113,9 @@ export function Collection({id}: {id: string}) {
             </select>
           </div>
         </div>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-3 items-center">
           <button
-            className="iconButton"
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-bg-secondary text-text-secondary hover:bg-bg-tertiary hover:text-text-primary transition-colors border border-border-secondary"
             onClick={() => {
               setShareCopied(true)
               const newUrl = `https://aistudio.google.com/apps/bundled/vibecheck?showPreview=true&appParams=vibecheckcollection${collectionData.id}`
@@ -120,21 +123,21 @@ export function Collection({id}: {id: string}) {
               setTimeout(() => setShareCopied(false), 1000)
             }}
           >
-            <span className="icon">share</span>
+            <span className="icon text-[18px]">share</span>
             <span className="tooltip">
               {shareCopied ? 'Copied!' : 'Copy share link'}
             </span>
           </button>
 
           <button
-            className="chip"
+            className="chip primary flex items-center gap-2 px-4 py-2 hover:brightness-110 transition-all font-medium text-sm"
             onClick={() => {
               initializeAudio()
               setScreensaverMode(true)
             }}
           >
-            <span className="icon">🖥️</span>
-            Screensaver Mode
+            <span className="icon text-[18px]">desktop_windows</span>
+            Screensaver
           </button>
         </div>
       </div>
