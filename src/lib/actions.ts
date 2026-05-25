@@ -108,7 +108,6 @@ export const addRound = async (
   // Add round immediately
   set(state => {
     state.userRounds.unshift(newRound)
-    state.feed = state.userRounds
   })
   
   // Trigger SEO Generation concurrently
