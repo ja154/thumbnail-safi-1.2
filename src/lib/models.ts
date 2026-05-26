@@ -7,9 +7,9 @@ import type {Models, Model} from './types'
 
 const models = {
   imagen: {
-    name: 'Imagen 4',
-    version: '4.0',
-    modelString: 'imagen-4.0-generate-001',
+    name: 'Imagen 3',
+    version: '3.0',
+    modelString: 'imagen-3.0-generate-001',
     shortName: 'Imagen',
     thinkingCapable: false,
     thinking: false,
@@ -20,7 +20,7 @@ const models = {
   flashImage: {
     name: 'Flash Image',
     version: '2.5',
-    modelString: 'gemini-2.5-flash-image',
+    modelString: 'gemini-2.5-flash',
     shortName: 'Flash',
     thinkingCapable: false,
     thinking: false,
