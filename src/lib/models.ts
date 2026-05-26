@@ -20,7 +20,7 @@ const models = {
   flashImage: {
     name: 'Flash Image',
     version: '2.5',
-    modelString: 'gemini-2.5-flash',
+    modelString: 'gemini-2.5-flash-image',
     shortName: 'Flash',
     thinkingCapable: false,
     thinking: false,
