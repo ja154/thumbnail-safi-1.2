@@ -91,46 +91,44 @@ ${qualitySuffix}
             resultData = base64List.map(base64 => `data:image/jpeg;base64,${base64}`)
           }
         } else {
-          // For Flash Image (generateContent), we can keep systemInstruction separate
-          // but prompt must be strong. It does not support multiple images directly via numberOfImages but we only use Imagen mostly now.
+          // For Flash Image fallback on Free Tier, we use Gemini to create a rich prompt and Pollinations for image generation
           const runSingle = async () => {
-            const modelPromise = ai.models.generateContent({
-              model,
+            const visualPromptPromise = ai.models.generateContent({
+              model: 'gemini-2.5-flash',
               config: {
-                systemInstruction: systemInstruction,
-                safetySettings,
-                imageConfig: {
-                  aspectRatio: '16:9'
-                }
+                safetySettings
               },
               contents: [
                 {
                   parts: [
-                    ...(promptImage
-                      ? [
-                          {
-                            inlineData: {
-                              data: promptImage.split(',')[1],
-                              mimeType: 'image/png'
-                            }
-                          }
-                        ]
-                      : []),
-                    {text: `${prompt}\n\n${qualitySuffix}`}
+                    {text: `Rewrite this into a highly descriptive, comma-separated visual prompt for an AI image generator. Include specific lighting, camera angles, and atmosphere. Do not include markdown or explanations. \n\nStyle Guide: ${systemInstruction}\n\nSubject: ${prompt}\n\nTechnical specs: ${qualitySuffix}`}
                   ]
                 }
               ]
             })
 
-            const response: GenerateContentResponse = await withTimeout(modelPromise, timeoutMs)
-            const data = response.candidates?.[0]?.content?.parts?.find(
-              (p: Part) => p.inlineData
-            )?.inlineData?.data
+            const response: GenerateContentResponse = await withTimeout(visualPromptPromise, timeoutMs)
+            const visualPrompt = (response.text || prompt).trim()
 
-            if (data) {
-              return 'data:image/png;base64,' + data
-            }
-            return null
+            const seed = Math.floor(Math.random() * 1000000);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1280&height=720&nologo=true&seed=${seed}`;
+            
+            const res = await fetch(imageUrl);
+            if (!res.ok) throw new Error('Pollinations request failed');
+            const blob = await res.blob();
+            
+            return new Promise<string | null>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  if (typeof reader.result === 'string') {
+                    resolve(reader.result);
+                  } else {
+                    resolve(null)
+                  }
+                }
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+            });
           }
           
           const promises = Array(count).fill(0).map(() => runSingle())
